@@ -159,7 +159,8 @@ def calculate_degree_classification(modules_df, project_type):
     # 选择最优105学分
     if project_type == "3+1":
         valid_modules = modules_df[modules_df['level'] == 6].copy()
-        valid_modules = valid_modules[valid_modules['score'] >= 40]
+        # 允许分数>=30的课程参与最优105学分计算（补偿区间也计入）
+        valid_modules = valid_modules[valid_modules['score'] >= 30]
         # 按分数升序排序，准备剔除最低的15学分
         valid_modules = valid_modules.sort_values('score', ascending=True)
         credits_to_remove = 15
@@ -170,20 +171,20 @@ def calculate_degree_classification(modules_df, project_type):
         for idx, row in valid_modules.iterrows():
             if credits_to_remove > 0:
                 if row['credits'] <= credits_to_remove:
-                    # 整门课都剔除
                     credits_to_remove -= row['credits']
+                    # 整门剔除
                     removed_rows.append((row['name'], row['score'], row['credits']))
                     continue
                 else:
-                    # 只剔除部分学分
-                    actual_credits = row['credits'] - credits_to_remove
+                    # 只剔除部分
+                    剩余学分 = row['credits'] - credits_to_remove
+                    credits_to_remove = 0
                     modules_for_calc.append({
                         'name': row['name'],
                         'score': row['score'],
-                        'credits': actual_credits
+                        'credits': 剩余学分
                     })
-                    calc_detail_105 += f"| {row['name'] if row['name'] else '-'} | {row['score']} | {row['credits']} | {actual_credits} | {actual_credits/15:.2f} | {(actual_credits/15*row['score']):.2f} |\n"
-                    credits_to_remove = 0
+                    calc_detail_105 += f"| {row['name'] if row['name'] else '-'} | {row['score']} | {row['credits']} | {剩余学分} | {剩余学分/15:.2f} | {(剩余学分/15*row['score']):.2f} |\n"
             else:
                 modules_for_calc.append({
                     'name': row['name'],
