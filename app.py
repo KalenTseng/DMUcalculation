@@ -4,17 +4,18 @@ import numpy as np
 
 # 设置页面配置
 st.set_page_config(
-    page_title="DMU学位计算器",
+    page_title="DMU学位计算器-UKEC Leicester",
     page_icon="🎓",
     layout="wide"
 )
 
 # 页面标题
-st.title("DMU学位等级计算器")
+st.title("DMU学位等级计算器·UKEC Leicester")
 st.markdown("---")
 
 # 新增：学分要求提示
 st.markdown("**提示：最终学分总和需达到120，方可计算学位等级。**")
+st.markdown("**如有疑问，请咨询UKEC老师微信：Ukec_kalen**")
 
 # 初始化session state
 if 'modules' not in st.session_state:
