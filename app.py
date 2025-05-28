@@ -246,4 +246,4 @@ if st.session_state.modules:
         result = calculate_degree_classification(modules_df, project_type)
         st.markdown("---")
         st.subheader("计算结果")
-        st.write(result) 
+        st.write(result)
